@@ -1,15 +1,18 @@
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   background-color: antiquewhite;
 }
 header {
-  text-align: center;
-  height: 70px;
+  height: 10vh;
   background-color: aquamarine;
+  padding: 3vh 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 main {
   text-align: center;
@@ -18,7 +21,8 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1;
+  height: 85vh;
+  box-sizing: border-box;
 }
 .turn {
   margin-top: 3vh;
@@ -47,4 +51,12 @@ main {
 }
 .reset-button {
   margin-bottom: 3vh;
+}
+footer {
+  box-sizing: border-box;
+  height: 5vh;
+  background-color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
