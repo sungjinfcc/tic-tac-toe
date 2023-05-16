@@ -18,12 +18,14 @@ const gameBoard = (function () {
   const row = 3;
   const col = 3;
 
-  for (let i = 0; i < row; i++) {
-    board[i] = [];
-    for (let j = 0; j < col; j++) {
-      board[i].push(Cell());
+  const resetBoard = () => {
+    for (let i = 0; i < row; i++) {
+      board[i] = [];
+      for (let j = 0; j < col; j++) {
+        board[i].push(Cell());
+      }
     }
-  }
+  };
 
   const getBoard = () => board;
 
@@ -33,31 +35,68 @@ const gameBoard = (function () {
     }
   };
 
+  resetBoard();
+
   return {
     getBoard,
     checkBoard,
+    resetBoard,
   };
 })();
 
 const gameController = (function () {
   const players = ["X", "O"];
+  let winner = "";
+  const getWinner = () => winner;
 
   let activePlayer = players[0];
   const getActivePlayer = () => activePlayer;
 
   const switchTurn = () => {
-    activePlayer == players[0]
-      ? (activePlayer = players[1])
-      : (activePlayer = players[0]);
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const checkWinCondition = () => {
+    const board = gameBoard.getBoard();
+    for (let i = 0; i < 3; i++) {
+      if (
+        board[i][0].getValue() == board[i][1].getValue() &&
+        board[i][1].getValue() == board[i][2].getValue()
+      ) {
+        if (board[i][0].getValue() !== "") {
+          winner = board[i][0].getValue();
+        }
+      } else if (
+        board[0][i].getValue() == board[1][i].getValue() &&
+        board[1][i].getValue() == board[2][i].getValue()
+      ) {
+        if (board[0][i].getValue() !== "") {
+          winner = board[0][i].getValue();
+        }
+      }
+    }
+
+    if (
+      (board[0][0].getValue() == board[1][1].getValue() &&
+        board[1][1].getValue() == board[2][2].getValue()) ||
+      (board[0][2].getValue() == board[1][1].getValue() &&
+        board[1][1].getValue() == board[2][0].getValue())
+    ) {
+      if (board[1][1].getValue() !== "") {
+        winner = board[1][1].getValue();
+      }
+    }
   };
   const playRound = (cell) => {
     gameBoard.checkBoard(cell, getActivePlayer());
+    checkWinCondition();
     switchTurn();
   };
 
   return {
     playRound,
     getActivePlayer,
+    getWinner,
   };
 })();
 
@@ -72,11 +111,11 @@ const displayController = (function () {
     const board = gameBoard.getBoard();
     const activePlayer = gameController.getActivePlayer();
 
+    console.log(board, activePlayer);
+
     board.forEach((row, rowIndex) => {
       row.forEach((cell, index) => {
-        const cellIndex = rowIndex * 3 + index;
         const cellDiv = document.createElement("div");
-        cellDiv.dataset.cellNum = cellIndex;
         cellDiv.dataset.cellRow = rowIndex;
         cellDiv.dataset.cellCol = index;
         cellDiv.textContent = cell.getValue();
@@ -84,6 +123,16 @@ const displayController = (function () {
         boardDiv.append(cellDiv);
       });
     });
+
+    if (gameController.getWinner() !== "") {
+      scoreLabelDiv.textContent = `Winner is : ${gameController.getWinner()}`;
+      boardDiv.removeEventListener("click", clickHandler);
+    }
+  };
+
+  const resetScreen = () => {
+    gameBoard.resetBoard();
+    updateScreen();
   };
 
   function clickHandler(e) {
@@ -94,12 +143,15 @@ const displayController = (function () {
 
     if (!selectedCell) return;
 
-    console.log(selectedCell.getValue());
-
     gameController.playRound(selectedCell);
     updateScreen();
   }
+
   boardDiv.addEventListener("click", clickHandler);
 
   updateScreen();
+
+  return {
+    resetScreen,
+  };
 })();
