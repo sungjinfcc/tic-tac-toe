@@ -46,10 +46,14 @@ const gameBoard = (function () {
 
 const gameController = (function () {
   const players = ["X", "O"];
+  let activePlayer = players[0];
   let winner = "";
   const getWinner = () => winner;
+  const resetPlayer = () => {
+    activePlayer = players[0];
+    winner = "";
+  };
 
-  let activePlayer = players[0];
   const getActivePlayer = () => activePlayer;
 
   const switchTurn = () => {
@@ -97,13 +101,14 @@ const gameController = (function () {
     playRound,
     getActivePlayer,
     getWinner,
+    resetPlayer,
   };
 })();
 
 const displayController = (function () {
   const boardDiv = document.querySelector(".game-board");
   const turnLabelDiv = document.querySelector(".turn");
-  const scoreLabelDiv = document.querySelector(".score-board");
+  const resetButton = document.querySelector(".reset-button");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -125,14 +130,18 @@ const displayController = (function () {
     });
 
     if (gameController.getWinner() !== "") {
-      scoreLabelDiv.textContent = `Winner is : ${gameController.getWinner()}`;
+      turnLabelDiv.textContent = `Winner is : ${gameController.getWinner()}`;
       boardDiv.removeEventListener("click", clickHandler);
+    } else {
+      turnLabelDiv.textContent = `${activePlayer}'s turn!`;
     }
   };
 
   const resetScreen = () => {
     gameBoard.resetBoard();
+    gameController.resetPlayer();
     updateScreen();
+    boardDiv.addEventListener("click", clickHandler);
   };
 
   function clickHandler(e) {
@@ -148,6 +157,7 @@ const displayController = (function () {
   }
 
   boardDiv.addEventListener("click", clickHandler);
+  resetButton.addEventListener("click", resetScreen);
 
   updateScreen();
 
