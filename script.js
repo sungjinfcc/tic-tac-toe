@@ -17,6 +17,8 @@ const gameBoard = (function () {
   const board = [];
   const row = 3;
   const col = 3;
+  let markCount = 0;
+  const getMarkCount = () => markCount;
 
   const resetBoard = () => {
     for (let i = 0; i < row; i++) {
@@ -25,6 +27,7 @@ const gameBoard = (function () {
         board[i].push(Cell());
       }
     }
+    markCount = 0;
   };
 
   const getBoard = () => board;
@@ -32,6 +35,7 @@ const gameBoard = (function () {
   const checkBoard = (cell, player) => {
     if (cell.getValue() === "") {
       cell.markCell(player);
+      markCount++;
     }
   };
 
@@ -41,6 +45,7 @@ const gameBoard = (function () {
     getBoard,
     checkBoard,
     resetBoard,
+    getMarkCount,
   };
 })();
 
@@ -48,10 +53,13 @@ const gameController = (function () {
   const players = ["X", "O"];
   let activePlayer = players[0];
   let winner = "";
+  let isTie = false;
+  const getIsTie = () => isTie;
   const getWinner = () => winner;
   const resetPlayer = () => {
     activePlayer = players[0];
     winner = "";
+    isTie = false;
   };
 
   const getActivePlayer = () => activePlayer;
@@ -69,6 +77,7 @@ const gameController = (function () {
       ) {
         if (board[i][0].getValue() !== "") {
           winner = board[i][0].getValue();
+          return;
         }
       } else if (
         board[0][i].getValue() == board[1][i].getValue() &&
@@ -76,6 +85,7 @@ const gameController = (function () {
       ) {
         if (board[0][i].getValue() !== "") {
           winner = board[0][i].getValue();
+          return;
         }
       }
     }
@@ -88,7 +98,13 @@ const gameController = (function () {
     ) {
       if (board[1][1].getValue() !== "") {
         winner = board[1][1].getValue();
+        return;
       }
+    }
+
+    if (gameBoard.getMarkCount() === 9) {
+      isTie = true;
+      return;
     }
   };
   const playRound = (cell) => {
@@ -102,6 +118,7 @@ const gameController = (function () {
     getActivePlayer,
     getWinner,
     resetPlayer,
+    getIsTie,
   };
 })();
 
@@ -132,6 +149,8 @@ const displayController = (function () {
     if (gameController.getWinner() !== "") {
       turnLabelDiv.textContent = `Winner is : ${gameController.getWinner()}`;
       boardDiv.removeEventListener("click", clickHandler);
+    } else if (gameController.getIsTie()) {
+      turnLabelDiv.textContent = `Tie!`;
     } else {
       turnLabelDiv.textContent = `${activePlayer}'s turn!`;
     }
