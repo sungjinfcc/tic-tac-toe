@@ -25,7 +25,6 @@ main {
   box-sizing: border-box;
 }
 .turn {
-  margin-top: 3vh;
   margin-bottom: 3vh;
 }
 .game-board {
@@ -50,7 +49,10 @@ main {
   margin-bottom: 3vh;
 }
 .reset-button {
-  margin-bottom: 3vh;
+  border: none;
+  border-radius: 5px;
+  padding: 1vw 2vw;
+  cursor: pointer;
 }
 footer {
   box-sizing: border-box;
