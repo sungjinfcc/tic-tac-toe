@@ -1,31 +1,39 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+}
+
 body {
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  background-color: antiquewhite;
+  background-color: #aaa69d;
+  font-family: "Roboto Mono", monospace;
 }
 header {
   height: 10vh;
-  background-color: aquamarine;
-  padding: 3vh 0;
+  padding-top: 10vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
+  font-size: 2.5rem;
 }
 main {
   text-align: center;
-  background-color: bisque;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 85vh;
-  box-sizing: border-box;
 }
 .turn {
-  margin-bottom: 3vh;
+  margin: 3vh 0;
+  font-size: 1.5rem;
 }
 .game-board {
   display: grid;
@@ -33,32 +41,45 @@ main {
   grid-template-rows: repeat(3, 1fr);
   width: 30vw;
   height: 30vw;
-  gap: 1px;
+  gap: 1rem;
   margin-bottom: 3vh;
 }
 .cell {
   border: none;
-  border-radius: 5px;
-  background-color: yellowgreen;
+  border-radius: 1rem;
+  background-color: #ffb142;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 5rem;
+  cursor: pointer;
 }
-.score-board {
-  margin-bottom: 3vh;
+.cell:hover {
+  background-color: #cc8e35;
 }
 .reset-button {
   border: none;
   border-radius: 5px;
   padding: 1vw 2vw;
   cursor: pointer;
+  font-size: 1.5rem;
+}
+.reset-button:hover {
+  background-color: #f7f1e3;
 }
 footer {
-  box-sizing: border-box;
   height: 5vh;
-  background-color: yellow;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.fa-github {
+  color: black;
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.fa-github:hover {
+  transform: rotate(360deg) scale(1.2);
 }
